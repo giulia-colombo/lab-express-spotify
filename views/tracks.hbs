@@ -1,0 +1,17 @@
+{{!-- 
+A track object comes with a preview_url, which is the source for 
+a 30-second preview of a particular song. 
+You can plug this into an HTML audio tag, and it will play the preview.
+ --}}
+
+<div id="navbar-tracks">
+    {{#each tracksFromApi}}
+
+    <div class="song">
+        <p>{{this.name}}</p>
+        <audio controls>
+            <source src={{this.preview_url}} type="audio/mpeg">
+        </audio>
+    </div>
+    {{/each}}
+</div>  

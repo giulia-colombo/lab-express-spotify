@@ -21,30 +21,48 @@ spotifyApi
   .then(data => spotifyApi.setAccessToken(data.body['access_token']))
   .catch(error => console.log('Something went wrong when retrieving an access token', error));
 
-  spotifyApi
-  .searchArtists(/*'HERE GOES THE QUERY ARTIST'*/)
-  .then(data => {
-    console.log('The received data from the API: ', data.body);
-    // ----> 'HERE WHAT WE WANT TO DO AFTER RECEIVING THE DATA FROM THE API'
-  })
-  .catch(err => console.log('The error while searching artists occurred: ', err));
-
 
 // Our routes go here:
 app.get('/', (req, res) => {
     res.render('index')
 })
 
+/* 
+The /artist-search route will receive the search term from the query string, and make a search
+request using one of the methods of the Spotify npm package.
+*/
 app.get('/artist-search', (req, res) => {
+  // console.log("body of request: ", req.body)
+  spotifyApi
+  .searchArtists(req.query.artist)
+  .then(data => {
+    console.log('The received data from the API: ', data.body.artists.items);
+    res.render('artist-search-results', {artistsFromSearch: data.body.artists.items})
+  })
+  .catch(err => console.log('The error while searching artists occurred: ', err));
 
 })
 
-spotifyApi
-  .searchArtists(/*'HERE GOES THE QUERY ARTIST'*/)
-  .then(data => {
-    console.log('The received data from the API: ', data.body);
-    // ----> 'HERE WHAT WE WANT TO DO AFTER RECEIVING THE DATA FROM THE API'
-  })
-  .catch(err => console.log('The error while searching artists occurred: ', err));
+  app.get('/albums/:artistId', (req, res, next) => {
+    console.log('artistId is: ', req.params.artistId)
+    spotifyApi
+    .getArtistAlbums(req.params.artistId)
+    .then(data => {
+      console.log('The received data from the API: ', data.body.items);
+      res.render('albums', {albumsFromApi: data.body.items} )
+    })
+    .catch(err => console.log('The following error occurred: ', err))
+  });
+
+  app.get('/tracks/:albumId', (req, res, next) => {
+    console.log("albumId is: ", req.params.albumId)
+    spotifyApi
+    .getAlbumTracks(req.params.albumId)
+    .then(data => {
+      console.log('The received data from the API: ', data.body.items);
+      res.render('tracks', {tracksFromApi: data.body.items})
+    })
+    .catch(err => console.log('The following error occurred: ', err))
+  });
 
 app.listen(3000, () => console.log('My Spotify project running on port 3000 🎧 🥁 🎸 🔊'));

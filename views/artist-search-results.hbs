@@ -1,0 +1,11 @@
+{{!-- name, image, button (or link) to show the albums for a particular artist --}}
+
+<h1>Example artist page with albums</h1>
+
+{{#each artistsFromSearch}}
+<div class="artist-album">
+    <p>Artist name: {{this.name}}</p>
+    <img src={{this.images.2.url}} alt="{{this.name}}-album-cover">
+    <a href="/albums/{{this.id}}">View Albums</a>
+</div>
+{{/each}}

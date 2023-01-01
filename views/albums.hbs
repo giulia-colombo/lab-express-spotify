@@ -1,0 +1,9 @@
+<h1>Albums for this artist</h1>
+{{!-- name, cover, link to see tracks --}}
+{{#each albumsFromApi}}
+<div>   
+    <p>{{this.name}}</p>
+    <img src={{this.images.2.url}} alt="{{this.name}}-album-cover">
+    <a href="/tracks/{{this.id}}">View tracks</a>
+</div>
+{{/each}}
